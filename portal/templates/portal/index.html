@@ -33,21 +33,29 @@
 </head>
 <body>
     <nav>
-        <div>
-            <a href="{% url 'home' %}" style="font-weight: bold;">Design.pro</a>
-        </div>
-        <div>
-            {% if user.is_authenticated %}
-                <span style="color: white;">Привет, {{ user.get_full_name|default:user.username }}!</span>
-                <a href="{% url 'my_applications' %}">Мои заявки</a>
-                <a href="{% url 'create_application' %}">Создать заявку</a>
-                <a href="{% url 'logout' %}">Выход</a>
-            {% else %}
-                <a href="{% url 'login' %}">Вход</a>
-                <a href="{% url 'register' %}">Регистрация</a>
+    <div>
+        <a href="{% url 'home' %}" style="font-weight: bold; font-size: 1.2em; color: white;">Design.pro</a>
+    </div>
+    <div>
+        {% if user.is_authenticated %}
+            <span style="color: #ced4da; margin-right: 15px; font-size: 0.95em;">
+                Привет, {{ user.get_full_name|default:user.username }}!
+                {% if user.is_staff %}<span style="color: #ffc107; font-weight: bold;">[Админ]</span>{% endif %}
+            </span>
+
+            {% if user.is_staff %}
+                <a href="{% url 'admin_dashboard' %}" style="color: #ffc107; font-weight: bold; margin-right: 10px;">Панель админа</a>
             {% endif %}
-        </div>
-    </nav>
+
+            <a href="{% url 'my_applications' %}" style="margin-left: 10px;">Мои заявки</a>
+            <a href="{% url 'create_application' %}" style="margin-left: 10px;">Создать заявку</a>
+            <a href="{% url 'logout' %}" style="margin-left: 10px; color: #ff6b6b;">Выход</a>
+        {% else %}
+            <a href="{% url 'login' %}" style="margin-left: 15px;">Вход</a>
+            <a href="{% url 'register' %}" style="margin-left: 10px; background: #007bff; color: white; padding: 5px 10px; border-radius: 4px;">Регистрация</a>
+        {% endif %}
+    </div>
+</nav>
 
     <div class="container">
         {% block content %}

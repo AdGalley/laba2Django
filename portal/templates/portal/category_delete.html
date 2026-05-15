@@ -1,0 +1,23 @@
+{% extends 'portal/index.html' %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 80px auto; padding: 30px; text-align: center; background: white; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
+    <h2 style="color: #dc3545; margin-bottom: 15px;">⚠️ Подтверждение удаления</h2>
+
+    <p style="font-size: 1.1em; margin-bottom: 25px; line-height: 1.5;">
+        Вы действительно хотите удалить категорию <strong>"{{ category.name }}"</strong>?<br>
+        <span style="color: #dc3545; font-weight: bold;">Будет удалено заявок: {{ applications_count }}</span>
+    </p>
+
+    <form method="post" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" style="background-color: #dc3545; color: white; padding: 10px 25px; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px;">
+            Да, удалить
+        </button>
+    </form>
+
+    <a href="{% url 'category_list' %}" style="display: inline-block; padding: 10px 25px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 5px;">
+        Отмена
+    </a>
+</div>
+{% endblock %}
