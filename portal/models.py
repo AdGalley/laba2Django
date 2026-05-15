@@ -50,7 +50,7 @@ class CustomUser(AbstractUser):
         help_text='Только кириллица.'
     )
 
-    # поле для входа
+    # Указываем поле для входа
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'email']
 
@@ -122,6 +122,21 @@ class Application(models.Model):
         verbose_name='Пользователь',
         related_name='applications'
     )
+
+    design_image = models.ImageField(
+        'Дизайн помещения',
+        upload_to='designs/%Y/%m/%d/',
+        blank=True,
+        null=True,
+        help_text='Загружается при смене статуса на "Выполнено"'
+    )
+    admin_comment = models.TextField(
+        'Комментарий администратора',
+        blank=True,
+        null=True,
+        help_text='Заполняется при смене статуса на "Принято в работу"'
+    )
+    updated_at = models.DateTimeField('Дата изменения', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Заявка'
