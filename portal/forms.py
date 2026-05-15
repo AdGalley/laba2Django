@@ -1,8 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import authenticate
-from .models import CustomUser
+from .models import CustomUser, Application, Category
 from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
 
 # Валидаторы
 cyrillic_validator = RegexValidator(
@@ -75,3 +75,34 @@ class CustomAuthenticationForm(AuthenticationForm):
         strip=False,
         widget=forms.PasswordInput,
     )
+
+
+class ApplicationForm(forms.ModelForm):
+    """Форма создания заявки"""
+
+    class Meta:
+        model = Application
+        fields = ['title', 'description', 'category', 'photo']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Название заявки'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Описание заявки'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+            'photo': forms.FileInput(attrs={'class': 'form-control'}),
+        }
+
+    def clean_photo(self):
+        """Проверка файла изображения"""
+        photo = self.cleaned_data.get('photo')
+        if photo:
+            # Проверка размера файла (2Мб = 2 * 1024 * 1024 байт)
+            max_size = 2 * 1024 * 1024
+            if photo.size > max_size:
+                raise ValidationError('Размер файла не должен превышать 2Мб.')
+
+            # Проверка формата файла
+            valid_extensions = ['jpg', 'jpeg', 'png', 'bmp']
+            file_extension = photo.name.split('.')[-1].lower()
+            if file_extension not in valid_extensions:
+                raise ValidationError('Допустимые форматы: jpg, jpeg, png, bmp.')
+
+        return photo
