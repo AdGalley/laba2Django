@@ -1,0 +1,23 @@
+{% extends 'portal/index.html' %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 50px auto; padding: 25px; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+    <h2 style="margin-bottom: 20px;">Добавить категорию</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Название категории <span style="color: red;">*</span></label>
+            {{ form.name }}
+            {% if form.name.errors %}
+                <div style="color: #dc3545; font-size: 0.9em; margin-top: 5px;">{{ form.name.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <button type="submit" style="background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Сохранить
+        </button>
+        <a href="{% url 'category_list' %}" style="margin-left: 15px; color: #6c757d; text-decoration: none;">Отмена</a>
+    </form>
+</div>
+{% endblock %}

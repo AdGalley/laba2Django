@@ -1,0 +1,38 @@
+{% extends 'portal/index.html' %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 50px auto; padding: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1 style="color: #007bff;">Управление категориями</h1>
+        <a href="{% url 'category_create' %}" style="background-color: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px;">
+            + Добавить категорию
+        </a>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <thead>
+            <tr style="background: #343a40; color: white;">
+                <th style="padding: 12px; border: 1px solid #dee2e6;">Название</th>
+                <th style="padding: 12px; border: 1px solid #dee2e6; width: 250px;">Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+            <tr>
+                <td style="padding: 12px; border: 1px solid #dee2e6;">{{ category.name }}</td>
+                <td style="padding: 12px; border: 1px solid #dee2e6;">
+                    <a href="{% url 'category_delete' category.pk %}" style="color: #dc3545; font-weight: bold;"> Удалить</a>
+                    <span style="font-size: 0.85em; color: #6c757d; margin-left: 5px;">(вместе со всеми заявками)</span>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2" style="text-align: center; padding: 20px; color: #6c757d;">Категорий нет</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <a href="{% url 'admin_dashboard' %}" style="color: #007bff; text-decoration: none;">&larr; Назад к заявкам</a>
+</div>
+{% endblock %}
