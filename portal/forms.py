@@ -94,15 +94,64 @@ class ApplicationForm(forms.ModelForm):
         """Проверка файла изображения"""
         photo = self.cleaned_data.get('photo')
         if photo:
-            # Проверка размера файла (2Мб = 2 * 1024 * 1024 байт)
-            max_size = 2 * 1024 * 1024
+            max_size = 2 * 1024 * 1024  # 2Мб
             if photo.size > max_size:
                 raise ValidationError('Размер файла не должен превышать 2Мб.')
 
-            # Проверка формата файла
             valid_extensions = ['jpg', 'jpeg', 'png', 'bmp']
             file_extension = photo.name.split('.')[-1].lower()
             if file_extension not in valid_extensions:
                 raise ValidationError('Допустимые форматы: jpg, jpeg, png, bmp.')
 
         return photo
+
+
+class ChangeStatusToCompletedForm(forms.ModelForm):
+    """Форма смены статуса на 'Выполнено' с загрузкой фотки"""
+
+    class Meta:
+        model = Application
+        fields = ['design_image']
+
+    def clean_design_image(self):
+        """Проверка файла"""
+        design_image = self.cleaned_data.get('design_image')
+        if not design_image:
+            raise ValidationError('Необходимо загрузить изображение дизайна.')
+
+        max_size = 2 * 1024 * 1024  # 2Мб
+        if design_image.size > max_size:
+            raise ValidationError('Размер файла не должен превышать 2Мб.')
+
+        valid_extensions = ['jpg', 'jpeg', 'png', 'bmp']
+        file_extension = design_image.name.split('.')[-1].lower()
+        if file_extension not in valid_extensions:
+            raise ValidationError('Допустимые форматы: jpg, jpeg, png, bmp.')
+
+        return design_image
+
+
+class ChangeStatusToInProgressForm(forms.ModelForm):
+    """Форма смены статуса на 'Принято в работу' с комментарием"""
+
+    class Meta:
+        model = Application
+        fields = ['admin_comment']
+
+    def clean_admin_comment(self):
+        """Проверка комментария"""
+        comment = self.cleaned_data.get('admin_comment')
+        if not comment or len(comment.strip()) == 0:
+            raise ValidationError('Необходимо указать комментарий.')
+        return comment
+
+
+class CategoryForm(forms.ModelForm):
+    """Форма управления категориями"""
+
+    class Meta:
+        model = Category
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Название категории'}),
+        }
