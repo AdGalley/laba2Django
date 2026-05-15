@@ -3,12 +3,27 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, ApplicationForm
-from .models import Application
+from .models import Application, Category
 
 
 def index(request):
     """Главная страница"""
-    return render(request, 'portal/index.html')
+    # Получаем не более 4 последних выполненных заявок
+    completed_applications = Application.objects.filter(
+        status='completed'
+    ).order_by('-created_at')[:4]
+
+    # Считаем количество заявок в статусе "Принято в работу"
+    in_progress_count = Application.objects.filter(
+        status='in_progress'
+    ).count()
+
+    context = {
+        'completed_applications': completed_applications,
+        'in_progress_count': in_progress_count,
+    }
+
+    return render(request, 'portal/index.html', context)
 
 
 def register_view(request):
