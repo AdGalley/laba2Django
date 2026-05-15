@@ -6,7 +6,7 @@
 
     <div style="margin: 20px 0;">
         <a href="{% url 'category_list' %}" style="background-color: #007bff; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; display: inline-block;">
-            📂 Управление категориями
+            Управление категориями
         </a>
     </div>
 
@@ -50,8 +50,8 @@
                 </td>
                 <td style="padding: 10px; border: 1px solid #dee2e6;">
                     {% if app.status == 'new' %}
-                        <a href="{% url 'change_status_in_progress' app.pk %}" style="color: #17a2b8; margin-right: 10px; font-weight: bold;">⏩ В работу</a>
-                        <a href="{% url 'change_status_completed' app.pk %}" style="color: #28a745; font-weight: bold;">✅ Выполнить</a>
+                        <a href="{% url 'change_status_in_progress' app.pk %}" style="color: #17a2b8; margin-right: 10px; font-weight: bold;"> В работу</a>
+                        <a href="{% url 'change_status_completed' app.pk %}" style="color: #28a745; font-weight: bold;"> Выполнить</a>
                     {% else %}
                         <span style="color: #6c757d; font-style: italic;">Обработка завершена</span>
                     {% endif %}
